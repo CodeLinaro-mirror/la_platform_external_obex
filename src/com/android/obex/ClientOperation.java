@@ -177,7 +177,8 @@ public final class ClientOperation implements Operation, BaseStream {
             throw new IOException("Operation has already ended");
         }
 
-        mExceptionMessage = "Operation aborted";
+        mParent.mAborting = true;
+	mExceptionMessage = "Operation aborted";
         if ((!mOperationDone) && (mReplyHeader.responseCode == ResponseCodes.OBEX_HTTP_CONTINUE)) {
             mOperationDone = true;
             /*
@@ -190,7 +191,8 @@ public final class ClientOperation implements Operation, BaseStream {
                 throw new IOException("Invalid response code from server");
             }
 
-            mExceptionMessage = null;
+            mParent.mAborting = false;
+	    mExceptionMessage = null;
         }
 
         close();
